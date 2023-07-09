@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+
+spring:
+  datasource:
+    url: your database credentials
+    username: your database credentials
+    password: your database credentials
+
+
+aws:
+  endpoint-url: http://s3.localhost.localstack.cloud:4566/
+  accessKeyId: acc3ss
+  secretAccessKey: s3cret
+
+
+camel:
+  from-uri: aws2-sqs://songFileToEnricherService?amazonSQSClient=#sqsClient
+  to-uri: aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient&autoCreateQueue=true
+
+
+spotify:
+  access-token-url: https://accounts.spotify.com/api/token
+  client-id: 3fe067374c8d40b9826c51cc939b640a
+  client-secret: d52509e021c54fd99c4ba2228db24abd
+

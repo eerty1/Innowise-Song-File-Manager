@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    volumes:
+      - song-storage:/var/lib/localstack
+volumes:
+  song-storage:
+    driver: local

@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+
+spring:
+  datasource:
+    url: your database credentials
+    username: your database credentials
+    password: your database credentials
+  jpa:
+    generate-ddl: true
+
+
+aws:
+  endpoint-url: http://s3.localhost.localstack.cloud:4566/
+  accessKeyId: acc3ss
+  secretAccessKey: s3cret
+
+
+camel:
+  from-uri: aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient
+
+
+exception-message:
+  no-such-element-exception: Failed to find your song file
+

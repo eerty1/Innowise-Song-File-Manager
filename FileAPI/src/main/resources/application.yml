@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: your database credentials
+    username: your database credentials
+    password: your database credentials
+  jpa:
+    generate-ddl: true
+
+
+aws:
+  endpoint-url: http://s3.localhost.localstack.cloud:4566/
+  bucket-name: song.files
+  accessKeyId: acc3ss
+  secretAccessKey: s3cret
+  local-storage-path: D:\programmingD\intellijProjects\InnowiseInternship\MusicAPIMicroservice\OtherData\ReserveFileStorage\
+
+
+spring.servlet.multipart:
+  max-file-size: 15MB
+  max-request-size: 15MB
+
+
+exception-message:
+  io-exception: Your song file wasn't saved
+
+
+song-upload-message: Your file has been successfully saved
