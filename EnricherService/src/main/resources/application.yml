@@ -1,27 +1,50 @@
 server:
-  port: 8081
-
+  port: ${ENRICHER_SERVICE_PORT}
 
 spring:
-  datasource:
-    url: your database credentials
-    username: your database credentials
-    password: your database credentials
-
+  application:
+    name: EnricherService
 
 aws:
-  endpoint-url: http://s3.localhost.localstack.cloud:4566/
-  accessKeyId: acc3ss
-  secretAccessKey: s3cret
-
+  endpoint-url: ${AWS_ENDPOINT_URL}
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_ACCESS_KEY}
 
 camel:
-  from-uri: aws2-sqs://songFileToEnricherService?amazonSQSClient=#sqsClient
-  to-uri: aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient&autoCreateQueue=true
+  sqs:
+    from-uri: ${SONG_FILE_ENRICHER_SERVICE_QUEUE}
+#    aws2-sqs://songFileToEnricherService?amazonSQSClient=#sqsClient&autoCreateQueue=true expected configuration
+    to-uri: ${SONG_METADATA_SONG_API}
+#    aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient&autoCreateQueue=true expected configuration
+  spotify:
+    bearer:
+      from-uri: seda:request-bearer-token
+      to-uri: seda:get-bearer-token
+    track:
+      from-uri: seda:request-track-metadata
+      to-uri: seda:get-track-metadata
+  song-file:
+    from-uri: seda:request-song
+    to-uri: seda:get-song
+    receive-song-url: ${RECEIVE_SONG_URL}
+  jwt:
+    from-uri: seda:request-token
+    to-uri: seda:get-token
+    receive-jwt-uri: ${RECEIVE_JWT_URI}
+  dataformat:
+    jackson:
+      auto-discover-object-mapper: true
 
+auth-credentials:
+  username: ${AUTH_CRED_USERNAME}
+  password: ${AUTH_CRED_PASSWORD}
 
 spotify:
   access-token-url: https://accounts.spotify.com/api/token
-  client-id: 3fe067374c8d40b9826c51cc939b640a
-  client-secret: d52509e021c54fd99c4ba2228db24abd
+  client-id: ${SPOTIFY_CLIENT_ID}
+  client-secret: ${SPOTIFY_CLIENT_SECRET}
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_REGISTRY_DEFAULT_ZONE}

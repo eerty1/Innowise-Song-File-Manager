@@ -1,0 +1,13 @@
+server:
+  port: ${EUREKA_REGISTRY_PORT}
+
+spring:
+  application:
+    name: SongFileManagerMicroserviceRegistry
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: ${EUREKA_REGISTRY_DEFAULT_ZONE}

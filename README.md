@@ -48,25 +48,26 @@ Run application from command line:
 
 * Open the folder in which you cloned the project
 
-* javac *microservice-name*.java 
-
-* java *microservice-name*
-
 * run docker-compose.yml from FileAPI to access localstack 
 
+* run **mvn install** in a folder of a specific microservice 
+
+* java -jar **microservice-name.jar**
+
 ## API endpoints
-File API: 
-1) http://localhost:8080/upload-file **POST** - uploads song file
+FileAPI: 
+* http://localhost:8080/api/swagger-ui/index.html
 
-Song API
-1) http://localhost:8082/song-pool **GET** - shows all uploaded song files
-2) http://localhost:8082/song-pool/update/{id} **PATCH** - updates concrete song file
-3) http://localhost:8082/song-pool/delete/{id} **DELETE** - deletes concrete song file
+SongAPI
+* http://localhost:8082/api/swagger-ui/index.html
 
-4) http://localhost:8082/get-s3metadata/{id} **GET** - shows concrete s3 metadata 
-5) http://localhost:8082/update-s3metadata/{id} **PATCH** - updates concrete s3 metadata
-6) http://localhost:8082/delete-s3metadata/{id} **DELETE** - deletes concrete s3 metadata
+AuthAPI
+* http://localhost:8083/api/swagger-ui/index.html
 
-7) http://localhost:8082/get-spotifymetadata/{id} **GET** - shows concrete spotify metadata 
-8) http://localhost:8082/update-spotifymetadata/{id}  **PATCH** - updates concrete spotify metadata
-9) http://localhost:8082/delete-spotifymetadata/{id} **DELETE** - deletes concrete spotify metadata
+## Peculiarities
+
+1) You have to run the microsevicies in a certain order:
+**EurekaRegistry** -> **FileAPI** -> **EnricherService** -> **SongAPI** -> **AuthAPI**
+In the further iterations of the project this problem will be solved with the help of docker-compose file.
+
+2) Some CRUD endpoins in the application are a little bit redundant. They are not deleted yet, since I plan to refine them in the future.

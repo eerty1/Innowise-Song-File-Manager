@@ -1,36 +1,31 @@
 package com.innowise.camel.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.innowise.repository.SongFileRepositoryService;
-import com.innowise.s3_storage.S3StorageService;
-import com.innowise.spotify_api.consumer.MetadataConsumer;
+import com.innowise.camel.supplier.Supplier;
+import com.innowise.model.song_file.SongFile;
+import com.innowise.model.spotify_metadata.track.TrackMetadata;
+import com.innowise.song_file_metadata_collector.CollectorService;
+import lombok.RequiredArgsConstructor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component
+@Component("metadataProcessor")
+@RequiredArgsConstructor
 public class MetadataProcessor implements Processor {
-    private final S3StorageService s3StorageService;
-    private final SongFileRepositoryService songFileRepositoryService;
-    private final MetadataConsumer metadataConsumer;
-
-    @Autowired
-    public MetadataProcessor(S3StorageService s3StorageService, SongFileRepositoryService songFileRepositoryService, MetadataConsumer metadataConsumer) {
-        this.s3StorageService = s3StorageService;
-        this.songFileRepositoryService = songFileRepositoryService;
-        this.metadataConsumer = metadataConsumer;
-    }
+    private final Supplier<Long, SongFile> songFileSupplier;
+    private final Supplier<SongFile, TrackMetadata> spotifyMetadataSupplier;
+    private final CollectorService collectorService;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Long songId = exchange.getMessage().getBody(Long.class);
-        ObjectMapper objectMapper = new ObjectMapper();
+        SongFile songFile = songFileSupplier.supply(exchange.getMessage().getBody(Long.class));
         Map<String, String> metadata = Map.of(
-                "S3Metadata", objectMapper.writeValueAsString(s3StorageService.obtainSongMetadata(songFileRepositoryService.getSongFileProperties(songId))),
-                "SpotifyMetadata", objectMapper.writeValueAsString(metadataConsumer.consumeSpotifyMetadata(songId))
+                "SongFileMetadata", objectMapper.writeValueAsString(collectorService.obtainMetadata(songFile)),
+                "TrackMetadata", objectMapper.writeValueAsString(spotifyMetadataSupplier.supply(songFile))
         );
         exchange.getIn().setBody(metadata);
     }

@@ -7,6 +7,7 @@ import javax.persistence.Converter;
 
 @Converter(autoApply = true)
 public class ExternalUrlsConverter implements AttributeConverter<ExternalUrls, String> {
+
     @Override
     public String convertToDatabaseColumn(ExternalUrls externalUrls) {
         return externalUrls.getSpotifyUrl();
@@ -14,8 +15,6 @@ public class ExternalUrlsConverter implements AttributeConverter<ExternalUrls, S
 
     @Override
     public ExternalUrls convertToEntityAttribute(String dbData) {
-        ExternalUrls externalUrls = new ExternalUrls();
-        externalUrls.setSpotifyUrl(dbData);
-        return externalUrls;
+        return new ExternalUrls(dbData);
     }
 }

@@ -1,0 +1,24 @@
+server:
+  port: ${AUTH_API_PORT}
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: AuthAPI
+  datasource:
+    url: ${AUTH_API_DB_URL}
+    username: ${AUTH_API_DB_USERNAME}
+    password: ${AUTH_API_DB_PASSWORD}
+  jpa:
+    generate-ddl: true
+
+rsa:
+  private-key: ${PRIV_KEY}
+  public-key: ${PUB_KEY}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_REGISTRY_DEFAULT_ZONE}
+

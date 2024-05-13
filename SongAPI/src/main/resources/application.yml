@@ -1,26 +1,34 @@
 server:
-  port: 8082
-
+  port: ${SONG_API_PORT}
+  servlet:
+    context-path: /api
 
 spring:
+  application:
+    name: SongAPI
   datasource:
-    url: your database credentials
-    username: your database credentials
-    password: your database credentials
+    url: ${SONG_API_DB_URL}
+    username: ${SONG_API_DB_USERNAME}
+    password: ${SONG_API_DB_PASSWORD}
   jpa:
     generate-ddl: true
 
-
 aws:
-  endpoint-url: http://s3.localhost.localstack.cloud:4566/
-  accessKeyId: acc3ss
-  secretAccessKey: s3cret
+  endpoint-url: ${AWS_ENDPOINT_URL}
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_ACCESS_KEY}
 
+rsa:
+  public-key: ${PUB_KEY}
+
+auth-api:
+  get-user-endpoint: ${GET_USER_URL}
 
 camel:
-  from-uri: aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient
+  song_metadata_song_api: ${SONG_METADATA_SONG_API}
+#  aws2-sqs://songDataToSongApi?amazonSQSClient=#sqsClient expected configuration
 
-
-exception-message:
-  no-such-element-exception: Failed to find your song file
-
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_REGISTRY_DEFAULT_ZONE}

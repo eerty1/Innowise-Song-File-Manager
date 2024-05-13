@@ -1,16 +1,15 @@
 package com.innowise.model.spotify_metadata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.innowise.model.attribute_converter.ExternalUrlsConverter;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.*;
 
-import javax.persistence.Convert;
-import java.io.Serializable;
-
+@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class ExternalUrls implements Serializable {
-    @JsonProperty("spotify")
+@EqualsAndHashCode
+public class ExternalUrls {
+
+    @Getter(onMethod_ = @JsonGetter("spotifyUrl"))
+    @Setter(onMethod_ = @JsonSetter("spotify"))
     private String spotifyUrl;
 }

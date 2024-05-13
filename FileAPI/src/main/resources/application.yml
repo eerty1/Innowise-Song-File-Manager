@@ -1,27 +1,41 @@
 spring:
+  application:
+    name: FileAPI
   datasource:
-    url: your database credentials
-    username: your database credentials
-    password: your database credentials
+    url: ${FILE_API_DB_URL}
+    username: ${FILE_API_DB_USERNAME}
+    password: ${FILE_API_DB_PASSWORD}
   jpa:
     generate-ddl: true
 
-
 aws:
-  endpoint-url: http://s3.localhost.localstack.cloud:4566/
-  bucket-name: song.files
-  accessKeyId: acc3ss
-  secretAccessKey: s3cret
-  local-storage-path: D:\programmingD\intellijProjects\InnowiseInternship\MusicAPIMicroservice\OtherData\ReserveFileStorage\
+  endpoint-url: ${AWS_ENDPOINT_URL}
+  bucket-name: ${AWS_BUCKET_NAME}
+  accessKeyId: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_ACCESS_KEY}
+  local-storage-path: ${LOCAL_STORAGE_PATH}
 
+camel:
+  songFileToEnricherServiceQueue: ${SONG_FILE_ENRICHER_SERVICE_QUEUE}
+#  aws2-sqs://songFileToEnricherService?amazonSQSClient=#sqsClient expected configuration
+  songFileDeletionToSongAPIQueue: ${SONG_FILE_SONG_API_DELETION_QUEUE}
+#  aws2-sqs://songFileDeletionToSongAPI?amazonSQSClient=#sqsClient expected configuration
+
+rsa:
+  public-key: ${PUB_KEY}
+
+auth-api:
+  get-user-endpoint: ${GET_USER_URL}
 
 spring.servlet.multipart:
   max-file-size: 15MB
   max-request-size: 15MB
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_REGISTRY_DEFAULT_ZONE}
 
-exception-message:
-  io-exception: Your song file wasn't saved
-
-
-song-upload-message: Your file has been successfully saved
+server:
+  servlet:
+    context-path: /api
